@@ -7,6 +7,22 @@ import { BAD_REQUEST } from "http-response-status-code";
  * Configuration options for KitTypeBoxTransformer and fromTypeBoxError.
  *
  * @interface IKitTypeBoxTransformerOptions
+ *
+ * @example
+ * ```typescript
+ * import { KitTypeBoxTransformer } from "@wthek/typebox-transformer";
+ *
+ * const options: IKitTypeBoxTransformerOptions = {
+ *   message: "Invalid payload provided",
+ *   statusCode: 422,
+ * };
+ *
+ * try {
+ *   Value.Assert(UserSchema, data);
+ * } catch (err) {
+ *   KitTypeBoxTransformer(err, options);
+ * }
+ * ```
  */
 export interface IKitTypeBoxTransformerOptions {
   /**

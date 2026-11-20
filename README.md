@@ -14,7 +14,7 @@ _Built for projects using [`http-error-kit`][http-error-kit], this utility trans
 [![Bundle Size](https://img.shields.io/bundlephobia/minzip/%40wthek%2Ftypebox-transformer)](https://bundlephobia.com/package/%40wthek%2Ftypebox-transformer)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/256715e97d954a5cb5afd9cca3039419)](https://app.codacy.com/gh/Skillnter/wthek-typebox-transformer/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/256715e97d954a5cb5afd9cca3039419)](https://app.codacy.com/gh/Skillnter/wthek-typebox-transformer/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
-[![Socket Badge](https://socket.dev/api/badge/npm/package/@wthek/typebox-transformer/1.0.0)](https://socket.dev/npm/package/@wthek/typebox-transformer/overview/1.0.0)
+[![Socket Badge](https://socket.dev/api/badge/npm/package/@wthek/typebox-transformer/1.1.0)](https://socket.dev/npm/package/@wthek/typebox-transformer/overview/1.1.0)
 [![Github Sponsors](https://img.shields.io/badge/GitHub%20Sponsors-30363D?&logo=GitHub-Sponsors&logoColor=EA4AAA)](https://github.com/sponsors/Skillnter)
 [![Open Collective](https://img.shields.io/badge/Open%20Collective-3385FF?logo=open-collective&logoColor=white)](https://opencollective.com/skillnter)
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/skillnter)
@@ -135,6 +135,18 @@ KitHttpErrorConfig.configureFormatter(
     traceId: args[0] || "0fcb44cb-4f09-4900-8c4f-73ddd37ffe0a",
   }),
 );
+```
+
+## AI Agent Integration
+
+When building with AI coding assistants (Claude Code, Cursor, GitHub Copilot, Antigravity, Devin), add the following directive to your project's `.cursorrules`, `.github/copilot-instructions.md`, or system prompt:
+
+```markdown
+### TypeBox Validation Error Rule
+- When validating input with TypeBox, transform validation failures into `http-error-kit` errors using `@wthek/typebox-transformer`.
+- For synchronous schema assertions: wrap in `try ... catch (err)` and invoke `KitTypeBoxTransformer(err)`.
+- For `Value.Errors()` flows: convert directly with `fromTypeBoxError([...Value.Errors(schema, data)])`.
+- Pair with `@wthek/*-middleware` to automatically serialize validation issues into structured HTTP responses.
 ```
 
 ## Explore More WTHek Extensions

@@ -1,6 +1,6 @@
 {
   "name": "@wthek/typebox-transformer",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Framework-agnostic utility that transforms TypeBox validation errors into structured http-error-kit errors. Preserves error issues and integrates cleanly with custom formatters.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -41,6 +41,15 @@
     "error",
     "kit",
     "http-errors",
+    "rfc-7807",
+    "rfc-9457",
+    "structured-errors",
+    "api-error-response",
+    "ai-agent",
+    "agent-skill",
+    "antigravity",
+    "cursor",
+    "copilot",
     "wthek",
     "skillnter"
   ],
@@ -51,8 +60,8 @@
   },
   "homepage": "https://github.com/Skillnter/wthek-typebox-transformer#readme",
   "dependencies": {
-    "http-error-kit": "^1.2.0",
-    "http-response-status-code": "^1.8.0"
+    "http-error-kit": "^1.5.0",
+    "http-response-status-code": "^1.9.0"
   },
   "peerDependencies": {
     "@sinclair/typebox": "^0.32.0 || ^0.33.0 || ^0.34.0"
@@ -76,6 +85,7 @@
   "files": [
     "dist/index.js",
     "dist/index.d.ts",
+    "llms.txt",
     "LICENSE"
   ],
   "funding": [

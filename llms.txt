@@ -1,0 +1,67 @@
+# @wthek/typebox-transformer
+
+> Framework-agnostic TypeBox error transformer for `http-error-kit`.
+
+## Overview
+`@wthek/typebox-transformer` transforms TypeBox validation errors into structured `KitHttpError` objects (defaulting to 400 Bad Request) with complete issue details attached under `issues`. Supports all TypeBox error formats: `TypeBoxError` instances (like `AssertError`), `ValueError[]` arrays, single `ValueError` objects, `Value.Errors()` iterators, and object wrappers with `{ errors: ValueError[] }`. Works seamlessly across Express, Fastify, Hono, Koa, NestJS, and Restify applications.
+
+## Installation
+```bash
+npm install @wthek/typebox-transformer @sinclair/typebox http-error-kit http-response-status-code
+```
+
+## Quick Start
+
+### Throwing Transformed Errors (`KitTypeBoxTransformer`)
+```typescript
+import { Type } from "@sinclair/typebox";
+import { Value } from "@sinclair/typebox/value";
+import { KitTypeBoxTransformer } from "@wthek/typebox-transformer";
+
+const UserSchema = Type.Object({
+  name: Type.String(),
+  age: Type.Number({ minimum: 18 }),
+});
+
+try {
+  Value.Assert(UserSchema, { name: "Hek", age: 14 });
+} catch (err) {
+  // Throws KitHttpError with status 400 and validation issues attached
+  KitTypeBoxTransformer(err);
+}
+```
+
+### Safe Conversion Without Throwing (`fromTypeBoxError`)
+```typescript
+import { Type } from "@sinclair/typebox";
+import { Value } from "@sinclair/typebox/value";
+import { fromTypeBoxError } from "@wthek/typebox-transformer";
+
+const errors = [...Value.Errors(UserSchema, data)];
+const kitError = fromTypeBoxError(errors, {
+  message: "Invalid Input",
+  statusCode: 422,
+});
+
+if (kitError) {
+  return res.status(kitError.statusCode).json(kitError.toJSON());
+}
+```
+
+## API Reference
+
+### `fromTypeBoxError(error: unknown, options?: IKitTypeBoxTransformerOptions): KitHttpError | null`
+Converts a TypeBox validation error into a `KitHttpError` without throwing. Returns `null` if the provided value is not a recognized TypeBox error.
+
+### `KitTypeBoxTransformer(error: unknown, options?: IKitTypeBoxTransformerOptions): never`
+Transforms a TypeBox validation error into a `KitHttpError` and throws it. If the value is not a TypeBox error, throws it unchanged.
+
+#### Options (`IKitTypeBoxTransformerOptions`)
+- `message` (`string`, default: `"TypeBox Validation Failed"`): Custom error message.
+- `statusCode` (`number`, default: `400`): Custom HTTP status code.
+
+## Safety Rules for AI Agents
+1. Wrap `Value.Assert()` calls in `try ... catch` and pass caught errors to `KitTypeBoxTransformer(err)`.
+2. When collecting errors with `Value.Errors()`, spread into an array and convert with `fromTypeBoxError([...errors])`.
+3. Non-TypeBox errors passed to `KitTypeBoxTransformer(err)` are rethrown unchanged, preventing swallowed runtime errors.
+
